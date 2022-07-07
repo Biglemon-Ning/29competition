@@ -16,6 +16,7 @@ The details are introduced in the ```requirements.txt```. The information of the
 ```
 Python = 3.7
 Pytorch = 1.8.0
+Numpy = 1.21.5
 ```
 If you need to construct a new environment by ```Conda```, you can use the following command in your device.
 ```
