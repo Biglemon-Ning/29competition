@@ -7,7 +7,7 @@ This section is used to present the details of this work
 ## The functions of different scripts
 In this section, we will introduce the function of each file in this project. 
 - ```data_loader.py``` is used to load data from the existing text files and preprocess the data preliminarily.
-- ```model.py``` is designed to build a model.
+- ```npu_model.py``` is designed to build a model.
 - ```train.py``` is employed to train the model and save the parameters.
 - ```test.py``` is to test the effectiveness of the existing model. 
 

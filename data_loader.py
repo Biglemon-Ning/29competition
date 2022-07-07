@@ -45,10 +45,17 @@ class My_datasets(Dataset):
         return data, label
 
     def data_convert(self, path):
-        file = open(path, 'r')
-        data = list(file)
-        file.close()
+        with open(path, 'r') as file:
+            data = file.readlines()
+            data = [float(i.strip('\n')) for i in data]
+            data = torch.tensor(list(data))
         return data
 
     def data_transform(self, data):
-        pass
+        data = data[:2916]
+        mean = data.mean()
+        std = data.std() 
+        data = (data - mean) / std
+        data = data.reshape(1, 54, 54)
+        data = torch.cat((data, data, data), dim=0)
+        return data
