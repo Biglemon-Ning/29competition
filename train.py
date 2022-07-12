@@ -34,34 +34,35 @@ def train():
     model.train()
 
     epoch = 0
-    LEARNING_RATE = lr / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
+    LEARNING_RATE = lr / math.pow((1 + 10 * epoch / epochs), 0.75)
     optimizer = torch.optim.SGD([
         {'params':model.resnet.parameters(), 'lr':LEARNING_RATE / 10},
         {'params':model.dense.parameters(), 'lr':LEARNING_RATE},
+        {'params':model.convert.parameters(), 'lr':LEARNING_RATE},
     ], lr=LEARNING_RATE / 10, momentum=momentum, weight_decay=l2_decay)
 
     train_loader = get_data(root, train_path)
     val_loader = get_data(root, val_path)
 
-    for data, label in train_loader:
+    for i in range(epochs):
         epoch += 1
-        data, label = data.to(device), label.to(device)
-        data, label = Variable(data), Variable(label)
+        for data, label in train_loader:
+            data, label = data.to(device), label.to(device)
+            data, label = Variable(data), Variable(label)
 
-        pred = model(data)
-        loss = F.nll_loss(F.log_softmax(pred, dim=1), label)
-        loss.backward()
-        optimizer.step()
-        print(f'The loss is : {loss}')
+            pred = model(data)
+            loss = F.nll_loss(F.log_softmax(pred, dim=1), label)
+            loss.backward()
+            optimizer.step()
+            print(f'{i} The loss is : {loss}')
 
-        if epoch % log_interval == 0:
-            val(model, val_loader)
+        val(model, val_loader)
 
 def val(model, data_loader):
     model.eval()
-    accuracy_max = 0
     correct_num = 0
     accuracy = 0
+    global accuracy_max
     for i, (data, label) in enumerate(data_loader):
         data, label = data.to(device), label.to(device)
         data, label = Variable(data), Variable(label)
@@ -74,7 +75,9 @@ def val(model, data_loader):
     accuracy = correct_num / len(data_loader.dataset)
     if accuracy > accuracy_max:
         accuracy_max = accuracy
-    print(f'The current accuracy is {accuracy}, the max accuracy is {accuracy_max}')
+        print('\n Start to save model.')
+        torch.save(model.state_dict(), os.path.join(root, 'result_model.pth'))
+    print(f'\n The current accuracy is {accuracy}, the max accuracy is {accuracy_max}')
 
 if __name__ == '__main__':
     train()

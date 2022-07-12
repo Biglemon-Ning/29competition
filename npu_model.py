@@ -165,17 +165,29 @@ def resnet50(pretrained=False, **kwargs):
         model.load_state_dict(model_zoo.load_url(model_urls['resnet50']))
     return model
 
+class Convert_layer(nn.Module):
+    def __init__(self, input, output):
+        super(Convert_layer, self).__init__()
+        self.dense = nn.Linear(input, output)
+        self.bn = nn.BatchNorm1d(9075)
+        self.relu = nn.ReLU()
+    def forward(self, x):
+        feature = self.dense(x)
+        feature = self.bn(feature)
+        feature = self.relu(feature)
+        return feature
+
 class NPU_model(nn.Module):
     def __init__(self, num_classes=10):
         super(NPU_model, self).__init__()
         self.num_classes = num_classes
+        self.convert = Convert_layer(3000, 9075)
         self.resnet = resnet50(True)
         self.dense = nn.Linear(2048, self.num_classes)
 
     def forward(self, x):
-        feature = self.resnet(x)
+        feature = self.convert(x).reshape(x.shape[0], 3, 55, 55)
+        feature = self.resnet(feature)
         pred = self.dense(feature)
 
         return pred
-
-
