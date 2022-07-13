@@ -2,7 +2,7 @@
 This file is used to load the training data.
 Author : Lemon
 Institution : Northwestern Polytechnical University
-Data : 2022.7.7
+Data : 2022.7.13
 '''
 
 import os 
@@ -18,7 +18,7 @@ def load_training(root_path, dir, batch_size, kwargs):
 
 def load_testing(root_path, dir, batch_size, kwargs):
     data = My_datasets(root=root_path + dir)
-    test_loader = torch.utils.data.DataLoader(data, batch_size=batch_size, shuffle=True, **kwargs)
+    test_loader = torch.utils.data.DataLoader(data, batch_size=batch_size, shuffle=False, **kwargs)
     return test_loader
 
 class My_datasets(Dataset):

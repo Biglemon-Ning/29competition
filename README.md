@@ -8,8 +8,7 @@ This section is used to present the details of this work
 In this section, we will introduce the function of each file in this project. 
 - ```data_loader.py``` is used to load data from the existing text files and preprocess the data preliminarily.
 - ```npu_model.py``` is designed to build a model.
-- ```train.py``` is employed to train the model and save the parameters.
-- ```test.py``` is to test the effectiveness of the existing model. 
+- ```main.py``` is employed to train the model, save the parameters, and test the performance of the existing model.
 - ```result_model.pth``` is the model that achieve the best perfoemance based on the evaluation dataset.
 
 ## Conda Environment
@@ -31,11 +30,11 @@ Linux 20.04.1 LTS
 ## Startup
 If you want to train a model, please use the following command.
 ```
-python train.py
+python main.py -s train
 ```
 If you are testing the performance of the existing model, please use the following command.
 ```
-python test.py
+python main.py -s test
 ```
 ## Contributor
 **Liang-bo Ning**
