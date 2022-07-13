@@ -1,18 +1,16 @@
 # README
 This file is used to record the details of this work.
 
-## Method
-This section is used to present the details of this work
-
 ## The functions of different files
 In this section, we will introduce the function of each file in this project. 
 - ```data_loader.py``` is used to load data from the existing text files and preprocess the data preliminarily.
 - ```npu_model.py``` is designed to build a model.
 - ```main.py``` is employed to train the model, save the parameters, and test the performance of the existing model.
 - ```result_model.pth``` is the model that achieve the best perfoemance based on the evaluation dataset.
+- ```requirements.txt``` is to record the information of the virtual environment.
 
 ## Conda Environment
-The details are introduced in the ```requirements.txt```. The information of the main package is shown as follow:
+The details are introduced in the ```requirements.txt```. The information of the main packages is shown as follow:
 ```
 Python = 3.7
 Pytorch = 1.8.0

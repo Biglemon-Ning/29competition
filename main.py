@@ -31,7 +31,7 @@ train_path = r'/train'
 val_path = r'/validation'
 
 train_loader = data_loader.load_training(root, train_path, batch_size, kwargs)
-val_loader = data_loader.load_testing(root, val_path, batch_size, kwargs)
+val_loader = data_loader.load_training(root, val_path, batch_size, kwargs)
 
 def train():
     model = NPU_model(10).to(device)
@@ -66,40 +66,50 @@ def val(model, data_loader):
     accuracy = 0
     result = []
     global accuracy_max
-    for i, (data, label) in enumerate(data_loader):
-        data, label = data.to(device), label.to(device)
-        data, label = Variable(data), Variable(label)
+    if args.status == 'train':
+        for i, (data, label) in enumerate(data_loader):
+            data, label = data.to(device), label.to(device)
+            data, label = Variable(data), Variable(label)
 
-        pred = model(data).max(1)[1]
-        result.extend(pred.tolist())
-        equal = torch.eq(pred, label)
-        correct_num += equal.sum()
-        rate = round(float(i / len(data_loader) * 100), 2)
-        print("\r", f'Start to evaluate : {rate}%', "▓" * (int(rate) // 2), end="", flush=True)
+            pred = model(data).max(1)[1]
+            result.extend(pred.tolist())
+            equal = torch.eq(pred, label)
+            correct_num += equal.sum()
+            rate = round(float(i / len(data_loader) * 100), 2)
+            print("\r", f'Start to evaluate : {rate}%', "▓" * (int(rate) // 2), end="", flush=True)
 
-    if args.status == 'test':
-        with open(os.path.join(root, 'test', 'output.txt'), 'w') as file:
+        accuracy = correct_num / len(data_loader.dataset)
+    
+        if args.status == 'train':
+            if accuracy > accuracy_max:
+                accuracy_max = accuracy
+                print('\n Start to save model.')
+                torch.save(model.state_dict(), os.path.join(root, 'result_model.pth'))
+            print(f'\n The current accuracy is {accuracy}, the max accuracy is {accuracy_max}')
+
+    elif args.status == 'test':
+        for i, data in enumerate(data_loader):
+            data = data.to(device)
+            data = Variable(data)
+
+            pred = model(data).max(1)[1]
+            result.extend(pred.tolist())
+            rate = round(float(i / len(data_loader) * 100), 2)
+            print("\r", f'Start to evaluate : {rate}%', "▓" * (int(rate) // 2), end="", flush=True)
+        print('\n The evaluation process is finished.')
+        with open(os.path.join(root, 'output.txt'), 'w') as file:
             for i in range(len(result)):
                 file.writelines([str(result[i]), '\n'])
                 
-    accuracy = correct_num / len(data_loader.dataset)
-    
-    if args.status == 'train':
-        if accuracy > accuracy_max:
-            accuracy_max = accuracy
-            print('\n Start to save model.')
-            torch.save(model.state_dict(), os.path.join(root, 'result_model.pth'))
-        print(f'\n The current accuracy is {accuracy}, the max accuracy is {accuracy_max}')
-    elif args.status == 'test':
-        print(f'\n The validation accuracy is {accuracy}')
 
 if __name__ == '__main__':
     if args.status == 'train':
         train()
     elif args.status == 'test':
+        test_loader = data_loader.load_testing(root, r'/test', batch_size, kwargs)
         model = NPU_model(10).to(device)
         model.load_state_dict(torch.load(os.path.join(root, 'result_model.pth'), map_location=device))
-        val(model, val_loader)
+        val(model, test_loader)
 
 
 

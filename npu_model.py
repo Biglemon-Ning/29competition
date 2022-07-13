@@ -8,7 +8,6 @@ import torch.nn as nn
 import math
 import torch.utils.model_zoo as model_zoo
 import torch.nn.functional as F
-# from memonger import SublinearSequential
 from torch.autograd import Variable
 import torch
 import numpy as np
