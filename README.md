@@ -19,9 +19,10 @@ Numpy = 1.21.5
 ```
 If you need to construct a new environment by ```Conda```, you can use the following command to create a new virtual environment called npu in your device. 
 ```
-codna create -n npu python=3.7 
+<!-- codna create -n npu python=3.7 
 conda activate npu
-conda install --yes --file requirements.txt
+conda install --yes --file requirements.txt -->
+conda env create -f requirements.yaml
 ```
 
 ## Operating System
