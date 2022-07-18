@@ -1,5 +1,5 @@
 '''
-This file is used to train the network.
+This file is used to train and test the model.
 Author : Yi-min Fu, Liang-bo Ning, Han-rui Shi, Shu-qian Zhou, Rui Liu 
 Institution : Northwestern Polytechnical University
 Date : 2022.7.18
@@ -38,11 +38,10 @@ def train():
     model.train()
 
     epoch = 0
-    LEARNING_RATE = lr / math.pow((1 + 10 * epoch / epochs), 0.75)
+    LEARNING_RATE = lr / math.pow((1 + 10 * epoch / 20), 0.75)
     optimizer = torch.optim.SGD([
         {'params':model.resnet.parameters(), 'lr':LEARNING_RATE / 10},
         {'params':model.dense.parameters(), 'lr':LEARNING_RATE},
-        {'params':model.convert.parameters(), 'lr':LEARNING_RATE},
     ], lr=LEARNING_RATE / 10, momentum=momentum, weight_decay=l2_decay)
 
     for i in range(epochs):

@@ -64,7 +64,10 @@ class My_datasets(Dataset):
         return data
 
     def data_transform(self, data):
+        data = data[:2916]
         mean = data.mean()
-        std = data.std()
+        std = data.std() 
         data = (data - mean) / std
+        data = data.reshape(1, 54, 54)
+        data = torch.cat((data, data, data), dim=0)
         return data
