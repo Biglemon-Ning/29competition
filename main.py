@@ -1,8 +1,8 @@
 '''
 This file is used to train the network.
-Author : Lemon
+Author : Yi-min Fu, Liang-bo Ning, Han-rui Shi, Shu-qian Zhou, Rui Liu 
 Institution : Northwestern Polytechnical University
-Data : 2022.7.13
+Date : 2022.7.18
 '''
 import os
 import torch
@@ -45,13 +45,13 @@ def train():
         {'params':model.convert.parameters(), 'lr':LEARNING_RATE},
     ], lr=LEARNING_RATE / 10, momentum=momentum, weight_decay=l2_decay)
 
-
     for i in range(epochs):
         epoch += 1
         for data, label in train_loader:
             data, label = data.to(device), label.to(device)
             data, label = Variable(data), Variable(label)
 
+            optimizer.zero_grad()
             pred = model(data)
             loss = F.nll_loss(F.log_softmax(pred, dim=1), label)
             loss.backward()

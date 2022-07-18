@@ -1,8 +1,8 @@
 '''
 This file is used to construct the model.
-Author : Lemon
+Author : Yi-min Fu, Liang-bo Ning, Han-rui Shi, Shu-qian Zhou, Rui Liu 
 Institution : Northwestern Polytechnical University
-Data : 2022.7.13
+Date : 2022.7.18
 '''
 import torch.nn as nn
 import math
