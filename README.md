@@ -15,15 +15,28 @@ The details are introduced in the ```requirements.txt```. The information of the
 ```
 Python = 3.7
 Pytorch = 1.8.0
-Numpy = 1.21.5
+Numpy = 1.21
 ```
 If you need to construct a new environment by ```Conda```, you can use the following command to create a new virtual environment called npu in your device. 
+First, in order to install package rapidly, you may need to use the Tsinghua Mirror Source.
 ```
-<!-- codna create -n npu python=3.7 
+conda config --show channels
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud//pytorch/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+conda config --set show_channel_urls yes
+```
+Then you can use the following command to create a new environment called ```npu``` and activate it.
+```
+conda create -n npu python=3.7 
 conda activate npu
-conda install --yes --file requirements.txt -->
-conda env create -f requirements.yaml
 ```
+After that, you should install pytorch in this environment.
+```
+conda install pytorch==1.8.0 torchvision==0.9.0 torchaudio==0.8.0 cpuonly 
+```
+If you are puzzled by the vision of any package, you can check out the corresponding information in ```requirements.txt```.
 
 ## Operating System
 ```
@@ -31,13 +44,13 @@ Linux 20.04.1 LTS
 ```
 ## Startup
 First and foremost, you need to create a virtual environment in your device. 
-If you want to train a model, please use the following command.
+If you want to train a model in ```Windows```, please use the following command.
 ```
-python main.py -s train
+python -X utf8 main.py -s train
 ```
-If you are testing the performance of the existing model, please use the following command.
+If you are testing the performance of the existing model in ```Windows```, please use the following command.
 ```
-python main.py -s test
+python -X utf8 main.py -s test
 ```
 ## Contributor
 - **Yi-min Fu**

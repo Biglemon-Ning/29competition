@@ -59,7 +59,10 @@ class My_datasets(Dataset):
     def data_convert(self, path):
         with open(path, 'r') as file:
             data = file.readlines()
-            data = [float(i.strip('\n')) for i in data]
+            try:
+                data = [float(i.strip('\n')) for i in data]
+            except ValueError:
+                print('ERROR : There are some abnormal files in this directory')
             data = torch.tensor(list(data))
         return data
 
