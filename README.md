@@ -18,7 +18,7 @@ Pytorch = 1.8.0
 Numpy = 1.21
 ```
 If you need to construct a new environment by ```Conda```, you can use the following command to create a new virtual environment called npu in your device. 
-First, in order to install package rapidly, you may need to use the Tsinghua Mirror Source.
+First, in order to install package rapidly, you may need to use the ```Tsinghua Mirror Source```.
 ```
 conda config --show channels
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
@@ -38,12 +38,7 @@ conda install pytorch==1.8.0 torchvision==0.9.0 torchaudio==0.8.0 cpuonly
 ```
 If you are puzzled by the vision of any package, you can check out the corresponding information in ```requirements.txt```.
 
-## Operating System
-```
-Linux 20.04.1 LTS
-```
 ## Startup
-First and foremost, you need to create a virtual environment in your device. 
 If you want to train a model in ```Windows```, please use the following command.
 ```
 python -X utf8 main.py -s train
@@ -61,3 +56,8 @@ python -X utf8 main.py -s test
 
 ## Contact Information
 biglemon1123@gmail.com
+
+## Operating System
+```
+Linux 20.04.1 LTS
+```
