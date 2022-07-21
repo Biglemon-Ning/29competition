@@ -64,8 +64,9 @@ def val(model, data_loader):
     correct_num = 0
     accuracy = 0
     result = []
+    acc_category = np.zeros(10)
     global accuracy_max
-    if args.status == 'train':
+    if args.status == 'train' or args.status == 'eval':
         for i, (data, label) in enumerate(data_loader):
             data, label = data.to(device), label.to(device)
             data, label = Variable(data), Variable(label)
@@ -74,8 +75,15 @@ def val(model, data_loader):
             result.extend(pred.tolist())
             equal = torch.eq(pred, label)
             correct_num += equal.sum()
+
+            buff = label[equal == 1]
+            for j in range(buff.shape[0]):
+                acc_category[label[j]] = acc_category[label[j]] + 1
+
             rate = round(float(i / len(data_loader) * 100), 2)
             print("\r", f'Start to evaluate : {rate}%', "▓" * (int(rate) // 2), end="", flush=True)
+        print('\n', f'The accuracy over each category is : \n {acc_category / np.float64(2000)}')
+        print('\n', f'The total accuracy is : {(acc_category / np.float64(20000)).sum() * 100} %')
 
         accuracy = correct_num / len(data_loader.dataset)
     
@@ -109,7 +117,8 @@ if __name__ == '__main__':
         model = NPU_model(10).to(device)
         model.load_state_dict(torch.load(os.path.join(root, 'result_model.pth'), map_location=device))
         val(model, test_loader)
-
-
-
-    
+    elif args.status == 'eval':
+        eval_loader = data_loader.load_training(root, r'/validation', batch_size, kwargs)
+        model = NPU_model(10).to(device)
+        model.load_state_dict(torch.load(os.path.join(root, 'result_model.pth'), map_location=device))
+        val(model, eval_loader)
